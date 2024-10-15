@@ -1,13 +1,13 @@
-import Head from "next/head"
-import { GetStaticPropsResult } from "next"
-import { DrupalNode } from "next-drupal"
+import Head from 'next/head';
+import { GetStaticPropsResult } from 'next';
+import { DrupalNode } from 'next-drupal';
 
-import { drupal } from "lib/drupal"
-import { Layout } from "components/layout"
-import { NodeArticleTeaser } from "components/node--article--teaser"
+import { drupal } from 'lib/drupal';
+import { Layout } from 'components/layout';
+import { NodeArticleTeaser } from 'components/node--article--teaser';
 
 interface IndexPageProps {
-  nodes: DrupalNode[]
+  nodes: DrupalNode[];
 }
 
 export default function IndexPage({ nodes }: IndexPageProps) {
@@ -34,28 +34,29 @@ export default function IndexPage({ nodes }: IndexPageProps) {
         )}
       </div>
     </Layout>
-  )
+  );
 }
 
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //これを追加した
   const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-    "node--article",
+    'node--article',
     context,
     {
       params: {
-        "filter[status]": 1,
-        "fields[node--article]": "title,path,field_image,uid,created",
-        include: "field_image,uid",
-        sort: "-created",
+        'filter[status]': 1,
+        'fields[node--article]': 'title,path,field_image,uid,created',
+        include: 'field_image,uid',
+        sort: '-created',
       },
     }
-  )
+  );
 
   return {
     props: {
       nodes,
     },
-  }
+  };
 }
